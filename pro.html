@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Application</title>
+    <style>
+        body {
+    font-family: 'Arial', sans-serif;
+    background-color: #2b2d42;
+
+
+    color: #ffffff;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    align-items: center; /* Center horizontally */
+    justify-content: center; /* Center vertically */
+}
+
+        .container {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center horizontally */
+    justify-content: center; /* Center vertically */
+    text-align: center;
+    width: 80%;
+    max-width: 800px; /* Control the maximum width */
+    margin: 0 auto; /* Center container */
+}
+        .question-container {
+            display: none;
+            margin: 20px;
+            text-align: left;
+            width: 80%; /* Control the width to better center the content */
+            max-width: 600px; /* Limit the width for larger screens */
+        }
+        .question {
+            font-size: 20px;
+            margin: 20px 0;
+        }
+        .options {
+            list-style-type: none;
+            padding: 0;
+        }
+        .options li {
+            margin: 10px 0;
+            cursor: pointer;
+        }
+        .hint {
+            font-style: italic;
+            margin: 10px 0;
+        }
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 20px;
+            font-size: 16px;
+            color: white;
+            background-color: #007BFF;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .info {
+            font-size: 18px;
+            margin: 20px;
+            line-height: 1.6;
+        }
+        h1 {
+            font-size: 36px;
+            margin: 20px;
+        }
+        .contact-info {
+            font-size: 16px;
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            margin: 0;
+        }
+
+        /* Bubbles Effect */
+        .bubble {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.5); /* White with 50% opacity */
+    animation: bubbleAnimation 15s infinite;
+    z-index: 1; /* Ensure bubbles stay behind the container content */
+}
+        @keyframes bubbleAnimation {
+            0% { transform: translateY(0); opacity: 1; }
+            100% { transform: translateY(-100vh); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Bubbles -->
+    <script>
+        function createBubbles(numBubbles) {
+            for (let i = 0; i < numBubbles; i++) {
+                const bubble = document.createElement('div');
+                bubble.className = 'bubble';
+                // Set random size and position for each bubble
+                bubble.style.width = `${Math.random() * 50 + 30}px`;
+                bubble.style.height = bubble.style.width;
+                bubble.style.top = `${Math.random() * 100}vh`;
+                bubble.style.left = `${Math.random() * 100}vw`;
+                // Set random animation duration
+                bubble.style.animationDuration = `${Math.random() * 5 + 5}s`;
+                document.body.appendChild(bubble);
+            }
+        }
+
+        // Create 20 bubbles
+        createBubbles(25);
+    </script>
+
+    <!-- Initial Page -->
+    <div id="initial-page" class="container">
+        <div>
+            <h1>Welcome to our Event</h1>
+            <div class="info">
+                <p><strong>Department:</strong> Computer Science and Engineering [Cyber Security]</p>
+                <p><strong>Event:</strong> Break The Query</p>
+            </div>
+            <button class="button" onclick="startQuiz()">Round 1</button>
+        </div>
+        <div class="contact-info">
+            <p><strong>Contact Information:</strong></p>
+            <p>Richhi Bajpai : +91 7709741447</p>
+            <p>Bhupendra Samudre : +91 8308289242</p>
+        </div>
+    </div>
+
+    <!-- Quiz Page -->
+    <div id="quiz-page" class="container" style="display: none;">
+        
+
+        <!-- Questions -->
+        <div id="question-1" class="question-container">
+            <div class="question">
+                1. What is wrong with the following C code snippet?
+                <pre>int main() {
+    printf("Hello, World!")
+    return 0;
+}</pre>
+            </div>
+            <ul class="options">
+                <li onclick="selectAnswer(1, 'a')">Missing semicolon after the printf statement.</li>
+                <li onclick="selectAnswer(1, 'b')">Missing return type for the main function.</li>
+                <li onclick="selectAnswer(1, 'c')">Incorrect header file inclusion.</li>
+                <li onclick="selectAnswer(1, 'd')">None of the above.</li>
+            </ul>
+            <div class="hint" id="hint-1" style="display: none;">Hint: Syntax errors in C need semicolons.</div>
+            <button class="button" onclick="showHint(1)">Show Hint</button>
+            <button class="button" onclick="nextQuestion(1)">Next</button>
+        </div>
+
+        <div id="question-2" class="question-container">
+            <div class="question">
+                2. What happens if you use an uninitialized variable in C? Identify the issue in this code:
+                <pre>int main() {
+    int x;
+    printf("%d", x);
+    return 0;
+}</pre>
+            </div>
+            <ul class="options">
+                <li onclick="selectAnswer(2, 'a')">The program will print 0.</li>
+                <li onclick="selectAnswer(2, 'b')">The program will print a random (garbage) value.</li>
+                <li onclick="selectAnswer(2, 'c')">The program will result in a compilation error.</li>
+                <li onclick="selectAnswer(2, 'd')">The program will crash with a segmentation fault.</li>
+            </ul>
+            <div class="hint" id="hint-2" style="display: none;">Hint: The value of an uninitialized variable in C is not defined and can be unpredictable.</div>
+            <button class="button" onclick="showHint(2)">Show Hint</button>
+            <button class="button" onclick="nextQuestion(2)">Next</button>
+        </div>
+
+        <div id="question-3" class="question-container">
+            <div class="question">
+                3. Identify the problem with this code snippet:
+                <pre>int arr[5];
+arr[5] = 10;
+</pre>
+            </div>
+            <ul class="options">
+                <li onclick="selectAnswer(3, 'a')">The program will compile and run correctly.</li>
+                <li onclick="selectAnswer(3, 'b')">The program will cause a segmentation fault.</li>
+                <li onclick="selectAnswer(3, 'c')">The program will print 10.</li>
+                <li onclick="selectAnswer(3, 'd')">The program will cause undefined behavior by accessing out-of-bounds memory.</li>
+            </ul>
+            <div class="hint" id="hint-3" style="display: none;">Hint: Accessing an index beyond the declared size of an array can lead to undefined behavior. Think about what happens if you try to use an index that is not within the valid range.</div>
+            <button class="button" onclick="showHint(3)">Show Hint</button>
+            <button class="button" onclick="nextQuestion(3)">Next</button>
+        </div>
+
+        <div id="question-4" class="question-container">
+            <div class="question">
+                4. The following code calculates the sum of elements in an array. Which optimization technique would improve the performance?
+                <pre>int sumArray(int arr[], int n) {
+    int sum = 0;
+    for (int i = 0; i < n; i++) {
+        sum += arr[i];
+    }
+    return sum;
+}</pre>
+            </div>
+            <ul class="options">
+                <li onclick="selectAnswer(4, 'a')">Unroll the loop to process multiple elements in a single iteration.</li>
+                <li onclick="selectAnswer(4, 'b')">Use a recursive function to calculate the sum.</li>
+                <li onclick="selectAnswer(4, 'c')">Initialize sum inside the loop.</li>
+                <li onclick="selectAnswer(4, 'd')">Use a while loop instead of a for loop.</li>
+            </ul>
+            <div class="hint" id="hint-4" style="display: none;">Hint: Focus on reducing the loop overhead and possibly improving cache performance.</div>
+            <button class="button" onclick="showHint(4)">Show Hint</button>
+            <button class="button" onclick="nextQuestion(4)">Next</button>
+        </div>
+
+        <div id="question-5" class="question-container">
+            <div class="question">
+                5. You are given the following code to compare two strings for equality. Which optimization will yield better performance?
+                <pre>int compareStrings(char *str1, char *str2) {
+    int i = 0;
+    while (str1[i] != '\0' && str2[i] != '\0') {
+        if (str1[i] != str2[i]) {
+            return 0; // Strings are not equal
+        }
+        i++;
+    }
+    return str1[i] == str2[i];
+}</pre>
+            </div>
+            <ul class="options">
+                <li onclick="selectAnswer(5, 'a')">Use the strcmp() function from the standard library.</li>
+                <li onclick="selectAnswer(5, 'b')">Compare the lengths of the strings before comparing character by character.</li>
+                <li onclick="selectAnswer(5, 'c')">Use bitwise operations for comparison.</li>
+                <li onclick="selectAnswer(5, 'd')">Use a for loop instead of a while loop.</li>
+            </ul>
+            <div class="hint" id="hint-5" style="display: none;">Hint: There's a standard library function specifically optimized for this task.</div>
+            <button class="button" onclick="showHint(5)">Show Hint</button>
+            <button class="button" onclick="nextQuestion(5)">Next</button>
+        </div>
+    </div>
+
+    <div id="question-6" class="question-container">
+    <div class="question">
+        6. The code below finds pairs of numbers in an array that add up to a given sum. How can you optimize it?
+        <pre>
+void findPairs(int arr[], int n, int sum) {
+    for (int i = 0; i < n; i++) {
+        for (int j = i + 1; j < n; j++) {
+            if (arr[i] + arr[j] == sum) {
+                printf("Pair: (%d, %d)\n", arr[i], arr[j]);
+            }
+        }
+    }
+}
+        </pre>
+    </div>
+    <ul class="options">
+        <li onclick="selectAnswer(6, 'a')">Use a hash map to store elements and find the complement in a single pass.</li>
+        <li onclick="selectAnswer(6, 'b')">Sort the array and use two pointers starting from both ends.</li>
+        <li onclick="selectAnswer(6, 'c')">Use binary search in the inner loop.</li>
+        <li onclick="selectAnswer(6, 'd')">Implement a recursive solution.</li>
+    </ul>
+    <div class="hint" id="hint-6" style="display: none;">Hint: Think of a data structure that allows O(1) average-time lookups.</div>
+    <button class="button" onclick="showHint(6)">Show Hint</button>
+    <button class="button" onclick="nextQuestion(6)">Next</button>
+</div>
+
+<!-- Question 7 -->
+<div id="question-7" class="question-container">
+    <div class="question">
+        7. You need to improve the performance of code that accesses a 2D array. Which approach would optimize memory access patterns?
+        <pre>
+for (int i = 0; i < rows; i++) {
+    for (int j = 0; j < cols; j++) {
+        printf("%d ", array[i][j]);
+    }
+}
+        </pre>
+    </div>
+    <ul class="options">
+        <li onclick="selectAnswer(7, 'a')">Flatten the 2D array into a 1D array.</li>
+        <li onclick="selectAnswer(7, 'b')">Access elements in a column-major order instead of row-major order.</li>
+        <li onclick="selectAnswer(7, 'c')">Use pointer arithmetic instead of array indexing.</li>
+        <li onclick="selectAnswer(7, 'd')">Implement cache blocking to improve memory access patterns.</li>
+    </ul>
+    <div class="hint" id="hint-7" style="display: none;">Hint: Consider how data is stored in memory and how to minimize cache misses.</div>
+    <button class="button" onclick="showHint(7)">Show Hint</button>
+    <button class="button" onclick="nextQuestion(7)">Next</button>
+</div>
+
+<!-- Question 8 -->
+<div id="question-8" class="question-container">
+    <div class="question">
+        8. What is the time complexity of the binary search algorithm, and why is it more efficient than a linear search for a sorted array?
+    </div>
+    <ul class="options">
+        <li onclick="selectAnswer(8, 'a')">O(n), because it checks every element.</li>
+        <li onclick="selectAnswer(8, 'b')">O(n log n), due to repeated division of the array.</li>
+        <li onclick="selectAnswer(8, 'c')">O(log n), because it repeatedly divides the search interval in half.</li>
+        <li onclick="selectAnswer(8, 'd')">O(1), because it finds the element immediately.</li>
+    </ul>
+    <div class="hint" id="hint-8" style="display: none;">Hint: Think about how binary search reduces the number of elements to search by half in each step.</div>
+    <button class="button" onclick="showHint(8)">Show Hint</button>
+    <button class="button" onclick="nextQuestion(8)">Next</button>
+</div>
+
+<!-- Question 9 -->
+<div id="question-9" class="question-container">
+    <div class="question">
+        9. How does the choice of data structure (e.g., hash table vs. linked list) impact the performance of search operations in C?
+    </div>
+    <ul class="options">
+        <li onclick="selectAnswer(9, 'a')">Hash tables generally provide O(1) average-time complexity for search operations, whereas linked lists provide O(n).</li>
+        <li onclick="selectAnswer(9, 'b')">Linked lists provide O(1) time complexity, making them faster for search operations than hash tables.</li>
+        <li onclick="selectAnswer(9, 'c')">Hash tables and linked lists have the same search time complexity.</li>
+        <li onclick="selectAnswer(9, 'd')">Linked lists are always more memory-efficient than hash tables, making them better for search operations.</li>
+    </ul>
+    <div class="hint" id="hint-9" style="display: none;">Hint: Think about how different data structures handle lookups and how their average time complexity differs.</div>
+    <button class="button" onclick="showHint(9)">Show Hint</button>
+    <button class="button" onclick="nextQuestion(9)">Next</button>
+</div>
+
+<!-- Question 10 -->
+<div id="question-10" class="question-container">
+    <div class="question">
+        10. What impact does increasing the compiler optimization level (e.g., from -O0 to -O2) have on the performance of a C program?
+    </div>
+    <ul class="options">
+        <li onclick="selectAnswer(10, 'a')">It increases the code size but decreases execution time by optimizing for speed.</li>
+        <li onclick="selectAnswer(10, 'b')">It decreases the code size and execution time by optimizing for space.</li>
+        <li onclick="selectAnswer(10, 'c')">It has no effect on the performance of the program.</li>
+        <li onclick="selectAnswer(10, 'd')">It might introduce errors, so it should be avoided.</li>
+    </ul>
+    <div class="hint" id="hint-10" style="display: none;">Hint: Consider how optimization levels affect the trade-off between code size and execution speed.</div>
+    <button class="button" onclick="showHint(10)">Show Hint</button>
+    <button class="button" onclick="nextQuestion(10)">Next</button>
+</div>
+
+<!-- Question 11 -->
+<div id="question-11" class="question-container">
+    <div class="question">
+        11. What does the Big-O notation describe in algorithm analysis?
+    </div>
+    <ul class="options">
+        <li onclick="selectAnswer(11, 'a')">The exact number of operations an algorithm performs.</li>
+        <li onclick="selectAnswer(11, 'b')">The space complexity of an algorithm.</li>
+        <li onclick="selectAnswer(11, 'c')">The upper bound of the time complexity of an algorithm.</li>
+        <li onclick="selectAnswer(11, 'd')">The average time complexity of an algorithm.</li>
+    </ul>
+    <div class="hint" id="hint-11" style="display: none;">Hint: Big-O notation helps to describe the worst-case scenario for the performance of an algorithm.</div>
+    <button class="button" onclick="showHint(11)">Show Hint</button>
+    <button class="button" onclick="nextQuestion(11)">Next</button>
+</div>
+<!-- Question 12 -->
+<div id="question-12" class="question-container">
+    <div class="question">
+        12. What is the time complexity of accessing an element in an array using its index?
+    </div>
+    <ul class="options">
+        <li onclick="selectAnswer(12, 'a')">O(1)</li>
+        <li onclick="selectAnswer(12, 'b')">O(log n)</li>
+        <li onclick="selectAnswer(12, 'c')">O(n)</li>
+        <li onclick="selectAnswer(12, 'd')">O(n^2)</li>
+    </ul>
+    <div class="hint" id="hint-12" style="display: none;">Hint: Consider how arrays are stored in memory and accessed.</div>
+    <button class="button" onclick="showHint(12)">Show Hint</button>
+    <button class="button" onclick="nextQuestion(12)">Next</button>
+</div>
+
+<div id="question-13" class="question-container">
+    <div class="question">
+        13. Which of the following is a key advantage of a linked list over an array?
+    </div>
+    <ul class="options">
+        <li onclick="selectAnswer(13, 'a')">Faster access to elements by index.</li>
+        <li onclick="selectAnswer(13, 'b')">Fixed size allocation.</li>
+        <li onclick="selectAnswer(13, 'c')">Dynamic size and easier insertion/deletion of elements.</li>
+        <li onclick="selectAnswer(13, 'd')">Better cache performance.</li>
+    </ul>
+    <div class="hint" id="hint-13" style="display: none;">Hint: Think about how linked lists handle memory allocation compared to arrays.</div>
+    <button class="button" onclick="showHint(13)">Show Hint</button>
+    <button class="button" onclick="nextQuestion(13)">Next</button>
+</div>
+
+<div id="question-14" class="question-container">
+    <div class="question">
+        14. Which of the following is a key advantage of a linked list over an array?
+    </div>
+    <ul class="options">
+        <li onclick="selectAnswer(14, 'a')">Faster access to elements by index.</li>
+        <li onclick="selectAnswer(14, 'b')">Fixed size allocation.</li>
+        <li onclick="selectAnswer(14, 'c')">Dynamic size and easier insertion/deletion of elements.</li>
+        <li onclick="selectAnswer(14, 'd')">Better cache performance.</li>
+    </ul>
+    <div class="hint" id="hint-13" style="display: none;">Hint: Think about how linked lists handle memory allocation compared to arrays.</div>
+    <button class="button" onclick="showHint(14)">Show Hint</button>
+    <button class="button" onclick="nextQuestion(14)">Next</button>
+</div>
+
+<div id="question-15" class="question-container">
+    <div class="question">
+        15. The following C code snippet is meant to perform a binary search. However, it contains an error. Identify the error and select the correct fix.
+        <pre>int binarySearch(int arr[], int size, int target) {
+    int left = 0, right = size - 1;
+    while (left <= right) {
+        int mid = (left + right) / 2;
+        if (arr[mid] == target) {
+            return mid;
+        } else if (arr[mid] > target) {
+            right = mid + 1;
+        } else {
+            left = mid - 1;
+        }
+    }
+    return -1;
+}</pre>
+    </div>
+    <ul class="options">
+        <li onclick="selectAnswer(15, 'a')">The mid calculation is incorrect.</li>
+        <li onclick="selectAnswer(15, 'b')">The right pointer should be updated to right = mid - 1.</li>
+        <li onclick="selectAnswer(15, 'c')">The left pointer should be updated to left = mid + 1.</li>
+        <li onclick="selectAnswer(15, 'd')">The loop condition should be left < right instead of left <= right.</li>
+    </ul>
+    <div class="hint" id="hint-14" style="display: none;">Hint: Consider how the left and right pointers should be adjusted when the middle element does not match the target.</div>
+    <button class="button" onclick="showHint(15)">Show Hint</button>
+    <button class="button" onclick="nextQuestion(15)">Next</button>
+</div>
+
+<div id="question-16" class="question-container">
+    <div class="question">
+        16. Examine the following binary search code. There's an error in the loop condition. Identify and correct it.
+        <pre>int binarySearch(int arr[], int size, int target) {
+    int left = 0, right = size - 1;
+    while (left < right) {
+        int mid = (left + right) / 2;
+        if (arr[mid] == target)
+            return mid;
+        else if (arr[mid] > target)
+            right = mid - 1;
+        else
+            left = mid + 1;
+    }
+    return -1;
+}</pre>
+    </div>
+    <ul class="options">
+        <li onclick="selectAnswer(16, 'a')">The loop condition should be left <= right.</li>
+        <li onclick="selectAnswer(16, 'b')">The calculation of mid is incorrect.</li>
+        <li onclick="selectAnswer(16, 'c')">The right pointer should be updated to right = mid.</li>
+        <li onclick="selectAnswer(16, 'd')">The left pointer should be updated to left = mid.</li>
+    </ul>
+    <div class="hint" id="hint-16" style="display: none;">Hint: The loop should continue as long as the search space is valid, including when left is equal to right.</div>
+    <button class="button" onclick="showHint(16)">Show Hint</button>
+    <button class="button" onclick="nextQuestion(16)">Next</button>
+</div>
+
+<!-- Question 17 -->
+<!-- Question 17 -->
+<div id="question-17" class="question-container">
+    <div class="question">
+        17. Given the following C code, what is the most likely issue causing incorrect output?
+        <pre>
+#include &lt;stdio.h&gt;
+
+int main() {
+    int arr[5] = {1, 2, 3, 4, 5};
+    for (int i = 0; i &lt;= 5; i++) {
+        printf("%d ", arr[i]);
+    }
+    return 0;
+}
+        </pre>
+    </div>
+    <ul class="options">
+        <li onclick="selectAnswer(17, 'a')">The array is declared with an incorrect size</li>
+        <li onclick="selectAnswer(17, 'b')">The loop condition should be i &lt; 5 instead of i &lt;= 5</li>
+        <li onclick="selectAnswer(17, 'c')">The printf function is used incorrectly</li>
+        <li onclick="selectAnswer(17, 'd')">The array elements are not initialized</li>
+    </ul>
+    <div class="hint" id="hint-17" style="display: none;">Hint: Check the loop condition to ensure it does not access out-of-bounds elements.</div>
+    <button class="button" onclick="showHint(17)">Show Hint</button>
+    <button class="button" onclick="nextQuestion(17)">Next</button>
+</div>
+
+
+<div id="question-18" class="question-container">
+    <div class="question">
+        18. What is the time complexity of the Merge Sort algorithm?
+    </div>
+    <ul class="options">
+        <li onclick="selectAnswer(18, 'a')">O(n)</li>
+        <li onclick="selectAnswer(18, 'b')">O(n log n)</li>
+        <li onclick="selectAnswer(18, 'c')">O(n^2)</li>
+        <li onclick="selectAnswer(18, 'd')">O(log n)</li>
+    </ul>
+    <div class="hint" id="hint-18" style="display: none;">Hint: Consider the number of times the array is divided and the work done to merge the subarrays.</div>
+    <button class="button" onclick="showHint(18)">Show Hint</button>
+    <button class="button" onclick="nextQuestion(18)">Next</button>
+</div>
+
+<div id="question-19" class="question-container">
+    <div class="question">
+        19. How does Merge Sort achieve its time complexity of O(n log n)?
+    </div>
+    <ul class="options">
+        <li onclick="selectAnswer(19, 'a')">By sorting each element individually.</li>
+        <li onclick="selectAnswer(19, 'b')">By dividing the array into halves and then merging them.</li>
+        <li onclick="selectAnswer(19, 'c')">By using a heap data structure.</li>
+        <li onclick="selectAnswer(19, 'd')">By inserting elements into a sorted array.</li>
+    </ul>
+    <div class="hint" id="hint-19" style="display: none;">Hint: Think about how the algorithm divides the problem and then combines the results.</div>
+    <button class="button" onclick="showHint(19)">Show Hint</button>
+    <button class="button" onclick="nextQuestion(19)">Next</button>
+</div>
+
+<div id="question-20" class="question-container">
+    <div class="question">
+        20. The following C code snippet is part of a Merge Sort implementation but has a logical error. Identify and correct the error.
+        <pre>void mergeSort(int arr[], int left, int right) {
+    if (left < right) {
+        int mid = (left + right) / 2;
+        mergeSort(arr, left, mid);
+        mergeSort(arr, mid + 1, right);
+        merge(arr, left, mid, right);
+    }
+}</pre>
+    </div>
+    <ul class="options">
+        <li onclick="selectAnswer(20, 'a')">The base case condition in the recursive function is incorrect.</li>
+        <li onclick="selectAnswer(20, 'b')">The merge function is called incorrectly.</li>
+        <li onclick="selectAnswer(20, 'c')">The mid calculation is incorrect.</li>
+        <li onclick="selectAnswer(20, 'd')">The mergeSort function should handle array bounds checking.</li>
+    </ul>
+    <div class="hint" id="hint-20" style="display: none;">Hint: Ensure that the array is divided correctly and that the merge function is called with appropriate indices.</div>
+    <button class="button" onclick="showHint(20)">Show Hint</button>
+    <button class="button" onclick="nextQuestion(20)">Next</button>
+</div>
+
+<div id="question-21" class="question-container">
+    <div class="question">
+        21. What will be the output of the following C code when executed, assuming file.txt does not already exist?
+        <pre>#include &lt;stdio.h&gt;
+
+int main() {
+    FILE *fp = fopen("file.txt", "w");
+    if (fp == NULL) {
+        printf("Error opening file.\n");
+        return 1;
+    }
+    fprintf(fp, "Hello, World!\n");
+    fclose(fp);
+    return 0;
+}</pre>
+    </div>
+    <ul class="options">
+        <li onclick="selectAnswer(21, 'a')">Error opening file.</li>
+        <li onclick="selectAnswer(21, 'b')">Hello, World! written to file.txt</li>
+        <li onclick="selectAnswer(21, 'c')">Nothing will be written to file.txt</li>
+        <li onclick="selectAnswer(21, 'd')">Program will crash</li>
+    </ul>
+    <div class="hint" id="hint-21" style="display: none;">Hint: The fopen function with mode "w" is used to write to a file.</div>
+    <button class="button" onclick="showHint(21)">Show Hint</button>
+    <button class="button" onclick="nextQuestion(21)">Next</button>
+</div>
+
+<div id="question-22" class="question-container">
+    <div class="question">
+        22. What will happen if you try to write to a file opened in read-only mode?
+        <pre>#include &lt;stdio.h&gt;
+
+int main() {
+    FILE *fp = fopen("file.txt", "r");
+    if (fp == NULL) {
+        printf("Error opening file.\n");
+        return 1;
+    }
+    fprintf(fp, "Attempt to write.");
+    fclose(fp);
+    return 0;
+}</pre>
+    </div>
+    <ul class="options">
+        <li onclick="selectAnswer(22, 'a')">The text Attempt to write. will be written to file.txt.</li>
+        <li onclick="selectAnswer(22, 'b')">Error opening file.</li>
+        <li onclick="selectAnswer(22, 'c')">The program will compile but fail at runtime.</li>
+        <li onclick="selectAnswer(22, 'd')">The program will crash.</li>
+    </ul>
+    <div class="hint" id="hint-22" style="display: none;">Hint: Writing to a file requires the correct mode.</div>
+    <button class="button" onclick="showHint(22)">Show Hint</button>
+    <button class="button" onclick="nextQuestion(22)">Next</button>
+</div>
+
+<div id="question-23" class="question-container">
+    <div class="question">
+        23. What is the primary purpose of a hash function in a hash table?
+    </div>
+    <ul class="options">
+        <li onclick="selectAnswer(23, 'a')">To sort data in ascending order</li>
+        <li onclick="selectAnswer(23, 'b')">To map keys to indices in the hash table</li>
+        <li onclick="selectAnswer(23, 'c')">To handle collisions between hash values</li>
+        <li onclick="selectAnswer(23, 'd')">To encrypt data stored in the hash table</li>
+    </ul>
+    <div class="hint" id="hint-23" style="display: none;">Hint: The hash function is used to determine where data should be placed in the table.</div>
+    <button class="button" onclick="showHint(23)">Show Hint</button>
+    <button class="button" onclick="nextQuestion(23)">Next</button>
+</div>
+
+<div id="question-24" class="question-container">
+    <div class="question">
+        24. When optimizing a function to process a large array in C, which of the following strategies is most likely to improve performance?
+    </div>
+    <ul class="options">
+        <li onclick="selectAnswer(24, 'a')">Use nested loops for simpler code</li>
+        <li onclick="selectAnswer(24, 'b')">Avoid unnecessary calculations within loops</li>
+        <li onclick="selectAnswer(24, 'c')">Increase the size of the array</li>
+        <li onclick="selectAnswer(24, 'd')">Use recursion extensively</li>
+    </ul>
+    <div class="hint" id="hint-24" style="display: none;">Hint: Minimizing repetitive work inside loops can significantly improve performance.</div>
+    <button class="button" onclick="showHint(24)">Show Hint</button>
+    <button class="button" onclick="nextQuestion(24)">Next</button>
+</div>
+
+<!-- Question 25 -->
+<div id="question-25" class="question-container">
+     <!-- Start of Form -->
+    <form action="nextpage.html" method="POST">
+    <div class="question">
+        25. Which sorting algorithm has the best average time complexity for sorting an array of integers?
+    </div>
+    <ul class="options">
+        <li onclick="selectAnswer(25, 'a')">Bubble Sort</li>
+        <li onclick="selectAnswer(25, 'b')">Quick Sort</li>
+        <li onclick="selectAnswer(25, 'c')">Insertion Sort</li>
+        <li onclick="selectAnswer(25, 'd')">Selection Sort</li>
+    </ul>
+    <div class="hint" id="hint-25" style="display: none;">Hint: This algorithm is known for its efficiency and is commonly used for large datasets.</div>
+    <button class="button" onclick="showHint(25)">Show Hint</button>
+    <button class="button" onclick="endQuiz()">Submit Quiz</button>
+</div>
+<!-- End of Form -->
+        <!-- Submit button -->
+        <input type="submit" value="Submit Quiz">
+    </form>
+</div>
+
+    <script>
+        let currentQuestion = 1;
+
+        function startQuiz() {
+            document.getElementById("initial-page").style.display = "none";
+            document.getElementById("quiz-page").style.display = "flex";
+            showQuestion(currentQuestion);
+        }
+
+        function showQuestion(questionNumber) {
+            document.querySelectorAll('.question-container').forEach(function(element) {
+                element.style.display = 'none';
+            });
+            document.getElementById('question-' + questionNumber).style.display = 'block';
+        }
+
+       function nextQuestion(currentQuestionNumber) {
+    currentQuestion++;
+    if (currentQuestion <= 25) {
+        showQuestion(currentQuestion);
+    } else {
+        endQuiz(); // Call the function to handle the end of the quiz
+    }
+}
+
+function endQuiz() {
+    // You can add logic here to handle the end of the quiz, such as displaying a final score or redirecting to another page.
+    document.getElementById("quiz-page").style.display = "none";
+    document.getElementById("completion-page").style.display = "block"; // Ensure you have a completion page or message
+}
+
+        function showHint(questionNumber) {
+            document.getElementById('hint-' + questionNumber).style.display = 'block';
+        }
+
+        function selectAnswer(questionNumber, answer) {
+            alert("Answer for question " + questionNumber + ": " + answer);
+            // Handle answer selection logic
+        }
+
+        function submitQuiz() {
+            alert("Quiz submitted!");
+            // Logic to handle quiz submission
+        }
+
+        function startRound2() {
+            alert("Starting Round 2!");
+            // Logic to navigate to Round 2 or display content for Round 2
+        }
+
+    </script>
+    
+
+</body>
+</html>
